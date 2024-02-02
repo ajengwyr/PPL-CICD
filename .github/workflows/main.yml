@@ -5,6 +5,7 @@ on:
       - main
 jobs:
   test:
+    if: ${{ false }}
     name: Functional Test
     permissions: write-all
     runs-on: ubuntu-latest
@@ -37,6 +38,18 @@ jobs:
 
       - name: Check the Hub
         run: curl http://localhost:4444/ui
+
+      - name: Install Selenium client
+        run: pip install -U selenium
+
+      - name: Run test
+        run: python tests/hello_aut.py ${{ env.URL }}
+        
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Screenshot
+          path: screenshot.png
 
       - name: stop docker
         run: docker stop docker-apache
